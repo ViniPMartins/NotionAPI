@@ -31,4 +31,7 @@ if __name__ == '__main__':
         app.run(port=5000, debug=True)
         
     except (KeyboardInterrupt, SystemExit):
+        print('Stop')
+        print('Scheduler is running:', scheduler.running)  # Verificar se o agendador está rodando
         scheduler.shutdown()
+        print('Scheduler is running:', scheduler.running) 
