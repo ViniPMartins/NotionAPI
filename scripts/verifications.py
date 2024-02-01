@@ -1,15 +1,17 @@
 import json
-from get_data_api import get_data_Notion_API, transform_API_data
+from .get_data_api import get_data_Notion_API, transform_API_data
+
+path_json = './saved_status/status_atual_projetos.json'
 
 def save_new_json(dict_json):
     print("Salvando novo JSON")
     json_object = json.dumps(dict_json)
-    with open("status_atual_projetos.json", 'w') as file:
+    with open(path_json, 'w') as file:
         file.write(json_object)
     return True
 
 def load_save_json():
-    with open("./status_atual_projetos.json", 'r') as file:
+    with open(path_json, 'r') as file:
         file_json = file.read()
         dict_json = json.loads(file_json)
     return dict_json
@@ -79,5 +81,11 @@ if __name__ == '__main__':
 
     data = get_data_Notion_API()
     new_query_API = transform_API_data(data)
-    saved_query = load_save_json()
+    
+    try:
+        saved_query = load_save_json()
+    except FileNotFoundError:
+        save_new_json(new_query_API)
+        saved_query = load_save_json()
+
     verify_modifications(new_query_API, saved_query)
